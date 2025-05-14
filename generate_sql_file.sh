@@ -36,7 +36,7 @@ USAGE="
 Options:
 ================
 
-    v: The version of MySQL to build the sys schema for, either '56' or '57'
+    v: The version of MySQL to build the sys schema for, either '56' or '57' or '100' or '105'
 
     b: Whether to omit any lines that deal with sql_log_bin (useful for RDS)
 
@@ -82,13 +82,15 @@ while getopts ":v:bhmu:" opt; do
       fi
       ;;
     v)
-      if [ $OPTARG == "56" ] || [ $OPTARG == "57" ] || [ $OPTARG == "100" ] || [ $OPTARG == "101" ];
-      then
-        MYSQLVERSION=$OPTARG
-      else
-      	echo "Invalid -v option, please run again with either '-v 56' or '-v 57'"
-      	exit 1
-      fi
+      case "$OPTARG" in
+        56|57|100|101|105)
+          MYSQLVERSION="$OPTARG"
+          ;;
+        *)
+          echo "Invalid -v option, veuillez utiliser l’une des valeurs suivantes : 56, 57, 100, 101, 105." >&2
+          exit 1
+          ;;
+      esac
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
